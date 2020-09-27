@@ -15,7 +15,7 @@ A simple login api made in node.js
 
 
 ```bash
-git clone {AA}
+git clone https://github.com/jvinicius-net/LoginAPI
 yarn add
 ```
 ```bash
