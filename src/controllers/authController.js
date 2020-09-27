@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 //Modules
 const logger = require('../modules/logger');
 const validEmail = require('../modules/validEmail');
-const jwtokenGenerate = require('../modules/tokemJWT');
+const jwtokenGenerate = require('../modules/generateJwt');
 
 //Models
 const User = require('../models/userModel');
@@ -20,11 +20,10 @@ router.post('/register', async (req, res) => {
 
         if (!validEmail.validate(email)) return res.status(400).send({ success: false, error: "Invalid Email!" });
 
-        if (await User.findOne({ email: email })) return res.status(400).send({ success: false, error: "User already exists!" });
-        const userCreate = await User.create(req.body);
+        let userCheck = await User.findOne({ email: email });
+        if (userCheck) return res.status(400).send({ success: false, error: "User already exists!" });
 
-        userCreate.password = undefined;
-        userCreate.__v = undefined;
+        const userCreate = await User.create(req.body);
 
         return res.status(201).send({ success: true, error: "User successfully registered!", token: jwtokenGenerate({ id: userCreate.id, email: userCreate.email, name: userCreate.name }) });
     } catch (err) {
