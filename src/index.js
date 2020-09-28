@@ -1,6 +1,6 @@
 const logger = require('./modules/logger.js');
-
 const express = require('express');
+require('dotenv').config();
 
 const app = express();
 
@@ -15,6 +15,7 @@ require('./controllers')(app);
 
 // Handle 404
 app.use(function(req, res, next) {
+    res.removeHeader("X-Powered-By");
     if(res.status(404)) {
         return res.status(404).send({success:false, error: `Controller not found!`});
     }
